@@ -1,13 +1,105 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/linearLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <TextView android:text="You need to run this via adb: see the blog post"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+    <TextView
+        android:id="@+id/instructionalText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="Welcome to a fork of SimServer."
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-</LinearLayout>
+    <TextView
+        android:id="@+id/blogPostLinkOne"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:autoLink="web"
+        android:clickable="true"
+        android:text="https://worthdoingbadly.com/vowifi"
+        app:layout_constraintStart_toStartOf="@id/instructionalText"
+        app:layout_constraintTop_toBottomOf="@+id/instructionalText" />
+
+    <TextView
+        android:id="@+id/blogPostLinkTwo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:autoLink="web"
+        android:clickable="true"
+        android:text="https://worthdoingbadly.com/vowifi2"
+        app:layout_constraintStart_toStartOf="@id/blogPostLinkOne"
+        app:layout_constraintTop_toBottomOf="@+id/blogPostLinkOne" />
+
+    <!-- the version is entirely arbitrary, its purpose is to show that new code is running on the phone after an install -->
+    <TextView
+        android:id="@+id/versionNumber"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:text="Version goes here"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/instructionalText" />
+
+    <Button
+        android:id="@+id/imsiCardOneButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:enabled="false"
+        android:text="IMSI Card1"
+        app:layout_constraintStart_toStartOf="@id/blogPostLinkTwo"
+        app:layout_constraintTop_toBottomOf="@+id/blogPostLinkTwo" />
+
+    <TextView
+        android:id="@+id/imsiCardOneTextOutput"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="IMSI Card1 goes here..."
+        app:layout_constraintBottom_toBottomOf="@+id/imsiCardOneButton"
+        app:layout_constraintStart_toEndOf="@+id/imsiCardOneButton"
+        app:layout_constraintTop_toTopOf="@+id/imsiCardOneButton" />
+
+    <Button
+        android:id="@+id/imsiCardTwoButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:enabled="false"
+        android:text="IMSI Card2"
+        app:layout_constraintStart_toStartOf="@id/imsiCardOneButton"
+        app:layout_constraintTop_toBottomOf="@+id/imsiCardOneButton" />
+
+    <TextView
+        android:id="@+id/imsiCardTwoTextOutput"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="IMSI Card2 goes here..."
+        app:layout_constraintBottom_toBottomOf="@+id/imsiCardTwoButton"
+        app:layout_constraintStart_toEndOf="@+id/imsiCardTwoButton"
+        app:layout_constraintTop_toTopOf="@+id/imsiCardTwoButton" />
+
+    <Button
+        android:id="@+id/serveCardOneButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:enabled="false"
+        android:text="Serve HTTP port 3333 Card1"
+        app:layout_constraintStart_toStartOf="@+id/imsiCardTwoButton"
+        app:layout_constraintTop_toBottomOf="@+id/imsiCardTwoButton" />
+
+    <Button
+        android:id="@+id/serveCardTwoButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:enabled="false"
+        android:text="Serve HTTP port 3334 Card2"
+        app:layout_constraintStart_toStartOf="@+id/serveCardOneButton"
+        app:layout_constraintTop_toBottomOf="@+id/serveCardOneButton" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

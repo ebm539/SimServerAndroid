@@ -1,9 +1,13 @@
 package com.worthdoingbadly.simserver;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Looper;
 import android.telephony.TelephonyManager;
+import android.telephony.UiccCardInfo;
 import android.util.Base64;
 
 import java.util.ArrayList;
@@ -13,22 +17,59 @@ import java.util.Map;
 import fi.iki.elonen.NanoHTTPD;
 
 public class SimServerMain {
+
     public static TelephonyManager telephonyManager;
+
     public static void main(String[] args) throws Exception {
+        System.out.println(String.format("Running version: %s", BuildConfig.VERSION_NAME));
         if (Build.VERSION.SDK_INT >= 30 /* Android 11 */) {
             // https://cs.android.com/android/platform/superproject/+/master:frameworks/base/cmds/telecom/src/com/android/commands/telecom/Telecom.java;l=48;drc=4b033d73165f96900b13d8a91536a7f7268a2b39
             Class activityThreadClass = Class.forName("android.app.ActivityThread");
+            System.out.println(1);
             activityThreadClass.getMethod("initializeMainlineModules").invoke(null);
+            System.out.println(2);
             Looper.prepareMainLooper();
+            System.out.println(3);
             Object mainActivityThread = activityThreadClass.getMethod("systemMain").invoke(null);
+            System.out.println(4);
             Context context = (Context) activityThreadClass.getMethod("getSystemContext").invoke(mainActivityThread);
+            System.out.println(5);
             telephonyManager = context.getSystemService(TelephonyManager.class);
+            System.out.println(6);
         } else {
+
             // Android 8.1
             telephonyManager = (TelephonyManager)
                     TelephonyManager.class.getMethod("getDefault")
                             .invoke(null);
+
+
+            // TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+
+
+
+            // Object mainActivityThread = activityThreadClass.getMethod("systemMain").invoke(null);
+
+            /*
+            Class activityThreadClass = Class.forName("android.app.ActivityThread");
+            Object mainActivityThread = activityThreadClass.getMethod("systemMain").invoke(null);
+            Context context = (Context) activityThreadClass.getMethod("getSystemContext").invoke(mainActivityThread);
+            telephonyManager = context.getSystemService(TelephonyManager.class);
+
+
+             */
+            // TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
         }
+        /*
+        System.out.println("Do we have carrier privileges?");
+        Boolean abc = telephonyManager.hasCarrierPrivileges();
+        System.out.println(abc);
+
+         */
+
+        System.out.println("We're still here!");
+
+
         if (args.length == 0) {
             System.out.println("Usage:\n" +
                     "imsi: prints imsi\n" +
@@ -37,13 +78,17 @@ public class SimServerMain {
             return;
         }
         if (args[0].equals("imsi")) {
-            System.out.println(telephonyManager.getSubscriberId());
+            String imsi = telephonyManager.getSubscriberId();
+            System.out.println(imsi);
         } else if (args[0].equals("auth")) {
-            String response = telephonyManager.getIccAuthentication(TelephonyManager.APPTYPE_ISIM, TelephonyManager.AUTHTYPE_EAP_AKA, args[1]);
+            String response = telephonyManager.getIccAuthentication(TelephonyManager.APPTYPE_USIM, TelephonyManager.AUTHTYPE_EAP_AKA, args[1]);
             System.out.println(response);
         } else if (args[0].equals("serve")) {
+            System.out.println("Serving");
             new SimHTTPD(Integer.parseInt(args[1])).start();
+            System.out.println("Serving started!");
             Looper.loop();
+            System.out.println("Looping!");
         } else {
             System.out.println("Unknown command");
         }
@@ -160,12 +205,13 @@ public class SimServerMain {
         }
         return response;
     }
-    private static class SimHTTPD extends NanoHTTPD {
+    private static class SimHTTPD extends NanoHTTPD {         
         SimHTTPD(int port) {
             super(port);
         }
         @Override
         public Response serve(IHTTPSession session) {
+            System.out.println("Hello from serving HTTPD non-GUI");
             // https://github.com/fasferraz/USIM-https-server
             Map<String, List<String>> params = session.getParameters();
             String type = first(params.get("type"));
