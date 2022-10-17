@@ -1,8 +1,12 @@
 package com.worthdoingbadly.simserver;
 
 import android.annotation.SuppressLint;
+<<<<<<< HEAD
 import android.Manifest;
 import android.app.Activity;
+||||||| 5cea0ca
+=======
+>>>>>>> fb4aed04952114a35c248ba6e91e4ec57695b903
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Build;
